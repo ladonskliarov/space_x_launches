@@ -1,14 +1,14 @@
-part of 'space_api_bloc.dart';
+part of 'launches_bloc.dart';
 
 ///Abstract parent class to denote
-abstract class SpaceApiEvent extends Equatable {
+abstract class LaunchesEvent extends Equatable {
   ///Constructor
-  const SpaceApiEvent();
+  const LaunchesEvent();
 }
 
-///Event class for data loading
+///Event for launches data loading
 @immutable
-class LoadLaunchesEvent extends SpaceApiEvent {
+class LoadLaunchesEvent extends LaunchesEvent {
   ///Constructor
   const LoadLaunchesEvent({required this.index});
   ///Index value from page number

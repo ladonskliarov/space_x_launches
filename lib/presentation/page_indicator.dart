@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:space_x_launches/data/rockets_images.dart';
 import 'package:space_x_launches/domain/page_provider.dart';
 
 ///Page indicator widget
 class PageIndicator extends StatelessWidget {
   ///Constructor
-  const PageIndicator({super.key});
+  const PageIndicator({
+    required this.rocketsListLength,
+    super.key,});
+  ///Class field for rockets list length
+  final int rocketsListLength;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class PageIndicator extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List<Widget>.generate(
-            rocketsImages.length, (index) => Padding(
+            rocketsListLength, (index) => Padding(
             padding: const EdgeInsets.symmetric(horizontal: 2),
             child: DecoratedBox(
               decoration: BoxDecoration(

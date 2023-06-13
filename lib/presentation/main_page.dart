@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:space_x_launches/domain/blocs/launches_bloc/launches_bloc.dart';
+import 'package:space_x_launches/domain/blocs/rockets_bloc/rockets_bloc.dart';
 
-import 'package:space_x_launches/domain/blocs/space_api_bloc.dart';
 import 'package:space_x_launches/domain/page_provider.dart';
 import 'package:space_x_launches/presentation/body_launches.dart';
 import 'package:space_x_launches/presentation/body_title.dart';
@@ -21,11 +22,17 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => SpaceApiBloc()..add(LoadLaunchesEvent(
-          index: context.read<PageNumberProvider>().pageNumber,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) =>
+          RocketsBloc()..add(const LoadRocketsEvent()),
         ),
-      ),
+        BlocProvider(
+          create: (context) => LaunchesBloc()..add(LoadLaunchesEvent(
+          index: context.read<PageNumberProvider>().pageNumber,
+            ),
+          ),
+        )],
       child: Scaffold(
         appBar: AppBar(
           title: const Text('SpaceX Launches',
@@ -34,14 +41,35 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
         ),
-        body: const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            RocketImageSlider(),
-            PageIndicator(),
-            BodyTitleWidget(),
-            BodyLaunchesWidget(),
-          ],
+        body: BlocBuilder<RocketsBloc, RocketsState>(
+            builder: (context, state) {
+              if (state is RocketsLoadedState) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RocketImageSlider(rocketsList: state.rocketsList),
+                    PageIndicator(rocketsListLength: state.rocketsList.length,),
+                    const BodyTitleWidget(),
+                    const BodyLaunchesWidget(),
+                  ],
+                );
+              } else if (state is RocketsErrorState) {
+                return Center(
+                  child: Text(
+                    state.error,
+                    style: const TextStyle(fontSize: 24, color: Colors.white),
+                  ),
+                );
+              } else if (state is LaunchesInitialState) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
         ),
       ),
     );

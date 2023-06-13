@@ -6,7 +6,7 @@ import 'package:space_x_launches/data/services/date_converter.dart';
 ///Class which has data about definitely launch
 class Launch {
   ///Constructor
-  Launch({
+  const Launch({
     required this.date,
     required this.time,
     required this.missionName,
@@ -15,11 +15,12 @@ class Launch {
   });
 
   ///Class fields
-  String date, time, missionName, launchSiteName;
+  final String date, time, missionName, launchSiteName;
   ///Wikipedia page field
-  String? wikiPage;
+  final String? wikiPage;
 
-  ///Factory constructor for Launch class. Which converts json to class data
+  ///Factory constructor for Launch class
+  ///Which converts json to class data
   factory Launch.fromJson(Map<String, dynamic> json){
     return Launch(
       date: SpaceXDateConverter.convertDate(json['launch_date_utc'] as String),
