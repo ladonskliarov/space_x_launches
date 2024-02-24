@@ -9,7 +9,6 @@ import 'package:space_x_launches/presentation/launch_card.dart';
 class BodyLaunchesWidget extends StatelessWidget {
   ///Constructor
   const BodyLaunchesWidget({super.key});
-  
 
   @override
   Widget build(BuildContext context){
